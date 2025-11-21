@@ -364,7 +364,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ contextData }) => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { role: 'user', text: input };
+    const userMsg = { role: 'user' as const, text: input };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsTyping(true);
