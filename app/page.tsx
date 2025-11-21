@@ -60,7 +60,7 @@ interface Shape {
 }
 
 // --- Gemini API Helper ---
-const apiKey = "AIzaSyCxg3RUaTlC8OzVmtHDZHZYtUQhUphls-c"; // Injected at runtime
+const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""; // Injected at build time
 
 const callGemini = async (prompt: string, systemInstruction: string = ""): Promise<string> => {
   try {
