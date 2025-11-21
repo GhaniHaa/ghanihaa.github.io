@@ -60,7 +60,7 @@ interface Shape {
 }
 
 // --- Gemini API Helper ---
-const apiKey = ""; // Injected at runtime
+const apiKey = "AIzaSyCxg3RUaTlC8OzVmtHDZHZYtUQhUphls-c"; // Injected at runtime
 
 const callGemini = async (prompt: string, systemInstruction: string = ""): Promise<string> => {
   try {
@@ -474,12 +474,39 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ contextData }) => {
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+
+      // Active section detection
+      const sections = ['hero', 'about', 'projects', 'contact'];
+      const current = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top >= -100 && rect.top < window.innerHeight / 2;
+        }
+        return false;
+      });
+      if (current) setActiveSection(current);
+    };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 80, // Offset for fixed header
+        behavior: 'smooth'
+      });
+      setActiveSection(id);
+    }
+  };
 
   const projects = [
     {
@@ -526,9 +553,17 @@ export default function App() {
             <span className="hidden sm:block bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">Ghanihaa</span>
           </div>
           <div className="flex gap-6 text-sm font-medium text-slate-400">
-            <a href="#about" className="hover:text-white transition-colors">Stack</a>
-            <a href="#projects" className="hover:text-white transition-colors">Projects</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+            {['about', 'projects', 'contact'].map((item) => (
+              <button 
+                key={item}
+                onClick={() => scrollToSection(item)}
+                className={`capitalize transition-colors ${
+                  activeSection === item ? 'text-white font-bold' : 'hover:text-white'
+                }`}
+              >
+                {item}
+              </button>
+            ))}
           </div>
         </div>
       </nav>
@@ -536,7 +571,7 @@ export default function App() {
       <main className="container mx-auto px-6 relative z-10">
         
         {/* Hero Section */}
-        <section className="min-h-screen flex flex-col justify-center pt-20">
+        <section id="hero" className="min-h-screen flex flex-col justify-center pt-20">
           <div className="max-w-3xl space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-semibold animate-fade-in">
               <span className="relative flex h-2 w-2">
@@ -560,12 +595,12 @@ export default function App() {
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
-              <a 
-                href="#projects"
+              <button 
+                onClick={() => scrollToSection('projects')}
                 className="px-8 py-3 rounded-lg bg-white text-slate-900 font-bold hover:bg-blue-50 transition-all flex items-center gap-2"
               >
                 View Work <Layers className="w-4 h-4" />
-              </a>
+              </button>
               <a 
                 href="https://github.com/ghanihaa" 
                 target="_blank" 
