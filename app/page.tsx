@@ -660,7 +660,7 @@ export default function App() {
               icon={Terminal}
               title="Backend & AI"
               color="purple"
-              items={["Node.js", "Python", "OpenAI/Gemini API", "LangChain", "PostgreSQL", "Firebase", "Docker"]}
+              items={["Node.js", "OpenAI/Gemini API", "PostgreSQL", "Firebase", "Docker"]}
             />
           </div>
         </section>
